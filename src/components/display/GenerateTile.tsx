@@ -68,7 +68,7 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
         className
       )}
     >
-      <Card className='flex w-full items-start whitespace-pre-line text-xs shadow'>
+      <Card className='flex w-full items-start whitespace-pre-line text-xs'>
         {prompt == '' ? 'Create a prompt template above' : prompt}
       </Card>
 

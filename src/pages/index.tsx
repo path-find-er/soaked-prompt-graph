@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       </Head>
       <Layout>
         <DesignTemplate />
-        <TryPrompts className='h-[70vh]' />
+        <TryPrompts className='h-[100vh]' />
       </Layout>
     </>
   );

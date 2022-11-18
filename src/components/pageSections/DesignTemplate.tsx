@@ -31,7 +31,7 @@ const DesignTemplate: React.FC<DesignTemplateProps> = ({ className }) => {
       <h2 className='m-auto py-3 '>Design template: </h2>
       <div className='flex '>
         <ReactFlow
-          className=' h-full min-h-[40vh] w-full rounded-xl bg-white'
+          className=' h-full min-h-[80vh] w-full rounded-xl bg-white'
           nodes={reactFlowNodes()}
           edges={reactFlowEdges()}
           nodeTypes={nodeTypes}
