@@ -2,6 +2,7 @@ import { TextInput } from 'flowbite-react';
 import { atom, useAtom } from 'jotai';
 import { useState } from 'react';
 import * as React from 'react';
+import { AiFillEyeInvisible } from 'react-icons/ai';
 import { HiCheckCircle } from 'react-icons/hi';
 import SimpleCrypto from 'simple-crypto-js';
 
@@ -13,7 +14,7 @@ const sk = 'NgqUCBFoLq7qn1RhOKNy';
 
 const useSC = new SimpleCrypto(sk);
 
-const ApiKeyAtom = atom('');
+export const ApiKeyAtom = atom('');
 
 type ApiInputGroupProps = {
   className?: string;
@@ -42,7 +43,9 @@ const ApiInputGroup: React.FC<ApiInputGroupProps> = ({ className }) => {
       className={clsxm('mb-5 flex grow items-center justify-center', className)}
     >
       <div className='group/ApiKey relative'>
-        <div className=' absolute inset-y-2 left-6 right-2 z-10 filter backdrop-blur-md group-hover/ApiKey:hidden' />
+        <div className='absolute inset-y-2 left-12 right-2 z-10 flex items-center justify-center rounded-lg bg-primary-50 group-hover/ApiKey:hidden'>
+          <AiFillEyeInvisible className='fill-primary-200' />
+        </div>
         <TextInput
           id='api-key'
           type='text'

@@ -4,7 +4,7 @@ import { useState } from 'react';
 // import uuid version 4
 import clsxm from '@/utils/clsxm';
 
-type TestAreaProps = {
+type TextAreaGroupProps = {
   nodeId: string;
   prompt?: string;
   index: number;
@@ -16,7 +16,7 @@ type TestAreaProps = {
   canDelete?: boolean;
 };
 
-export const TestArea: React.FC<TestAreaProps> = ({
+const TextAreaGroup: React.FC<TextAreaGroupProps> = ({
   nodeId,
   prompt = '',
   index,
@@ -30,9 +30,22 @@ export const TestArea: React.FC<TestAreaProps> = ({
 
   return (
     <div
-      className='group/prompt relative transition-transform hover:scale-95'
+      className='group/prompt relative min-w-[300px] '
       onMouseOver={() => setHideDelete(true)}
     >
+      <Label
+        htmlFor={`${key}-textarea`}
+        value='Enter Prompt'
+        className='sr-only'
+      />
+      <Textarea
+        className=' min-h-[200px] rounded-sm !border-gray-300 !bg-white !text-sm hover:!border-green-400'
+        id={`${key}-textarea`}
+        placeholder='Enter your prompt...'
+        color='gray'
+        onChange={(evt) => onChange(evt, index)}
+        defaultValue={prompt}
+      />
       <button
         aria-label='Delete prompt'
         className={clsxm(
@@ -49,20 +62,10 @@ export const TestArea: React.FC<TestAreaProps> = ({
         >
           -
         </p>
+        <span className='sr-only'>Delete prompt</span>
       </button>
-      <Label
-        htmlFor={`${key}-textarea`}
-        value='Enter Prompt'
-        className='sr-only'
-      />
-      <Textarea
-        className='rounded-sm border-gray-300 !bg-white'
-        id={`${key}-textarea`}
-        placeholder='Enter your prompt...'
-        rows={4}
-        onChange={(evt) => onChange(evt, index)}
-        defaultValue={prompt}
-      />
     </div>
   );
 };
+
+export default TextAreaGroup;

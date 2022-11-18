@@ -1,7 +1,7 @@
 import type { Position } from 'reactflow';
 import { Handle } from 'reactflow';
 
-import { clsxm, preppendBangToWords } from '@/utils/clsxm';
+import { clsxm } from '@/utils/clsxm';
 
 type handleProps = {
   type: 'target' | 'source';
@@ -26,20 +26,15 @@ export const CustomHandle: React.FC<handleProps> = ({
       style={{
         display: 'flex',
         zIndex: '10',
-        backgroundColor: '#D1FAE5',
-        transitionProperty: 'transform',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '1.5rem',
-        height: '2rem',
-        borderRadius: '0.5rem',
         cursor: 'pointer',
       }}
       className={clsxm(
-        preppendBangToWords(
-          'z-10 flex h-8 w-6 cursor-pointer items-center justify-center  rounded-lg bg-green-100 transition-transform hover:scale-110'
-        ),
-        className
+        '!h-5 !w-10 !rounded-sm !bg-green-400 !text-white',
+        className,
+        [position === 'top' && '!-top-5 !rounded-b-none'],
+        [position === 'bottom' && '!-bottom-5 !rounded-t-none']
       )}
       {...props}
     >

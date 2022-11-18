@@ -1,8 +1,11 @@
 import type DirectedGraph from 'graphology';
 import type { Node } from 'reactflow';
 
-export const defaultIncrementY = 200;
+export const defaultIncrementY = 300;
 export const defaultIncrementX = 350;
+export const minNodeWidth = 340;
+export const additionalNodeWidth = 310;
+export const defaultX = Math.ceil(minNodeWidth / 2);
 
 const doShift =
   (direction: 'start' | 'end') =>
@@ -11,9 +14,9 @@ const doShift =
       const { position } = shiftedGraph.getNodeAttributes(node);
       let increment = 0;
       if (multi) {
-        increment = defaultIncrementX / 2;
+        increment = defaultIncrementY / 2;
       } else {
-        increment = defaultIncrementX / 1;
+        increment = defaultIncrementY / 1;
       }
 
       if (direction === 'start') {
@@ -21,7 +24,7 @@ const doShift =
       }
 
       shiftedGraph.mergeNodeAttributes(node, {
-        position: { x: position.x + increment, y: position.y },
+        position: { y: position.y + increment, x: position.x },
       });
     });
 
@@ -108,26 +111,50 @@ export const removeEdge = (id: string, graph: DirectedGraph) => {
   return graph;
 };
 
+const centerNode = (id: string, promptCount: number, graph: DirectedGraph) => {
+  // 1. nodes are a minimum of 300px + ( 20px padding ) * 2 apart = 340px
+  // 2. each aditional node intoduces 10px spacing bewteen itself and the previous node
+  // we have to shift the nodes back to center by computing the new total width / 2 and subtracting it from 0.
+  const { position } = graph.getNodeAttributes(id);
+
+  const totalWidth = minNodeWidth + additionalNodeWidth * (promptCount - 1);
+  const shift = totalWidth / 2;
+
+  graph.mergeNodeAttributes(id, {
+    position: { y: position.y, x: -shift },
+  });
+
+  return graph;
+};
+
 export const removePrompt = (
   id: string,
   index: number,
   graph: DirectedGraph
 ) => {
+  const prompts = graph.getNodeAttribute(id, 'data').prompts;
+
   // each node must have at least one prompt
-  if (graph.getNodeAttribute(id, 'data').prompts.length === 1) {
+  if (prompts === 1) {
     return;
   }
-  const prompts = graph.getNodeAttribute(id, 'data').prompts;
   prompts.splice(index, 1);
   graph.setNodeAttribute(id, 'data', { prompts });
-  return graph;
+
+  // center nodes after removing a prompt
+  const centeredGraph = centerNode(id, prompts.length, graph);
+
+  return centeredGraph;
 };
 
 export const addPrompt = (id: string, prompt = '', graph: DirectedGraph) => {
   const prompts = graph.getNodeAttribute(id, 'data').prompts;
   prompts.push(prompt);
   graph.setNodeAttribute(id, 'data', { prompts });
-  return graph;
+
+  const centeredGraph = centerNode(id, prompts.length, graph);
+
+  return centeredGraph;
 };
 
 export const updatePrompt = (

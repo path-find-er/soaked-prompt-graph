@@ -5,9 +5,9 @@ import create from 'zustand';
 
 import 'reactflow/dist/style.css';
 
+import { defaultIncrementX, defaultX } from './utils';
 import {
   addPrompt,
-  defaultIncrementX,
   fetchLinkList,
   removePrompt,
   shift,
@@ -18,32 +18,10 @@ import {
 const starterGraph = new DirectedGraph();
 
 starterGraph.addNode('a', {
-  data: { prompts: ['What were the'] },
-  position: { x: 0, y: 0 },
+  data: { prompts: [''] },
+  position: { x: -defaultX + defaultIncrementX * 0, y: 0 },
   type: 'prompt',
 });
-
-starterGraph.addNode('b', {
-  data: { prompts: ['implications', 'effects'] },
-  position: { x: defaultIncrementX, y: 0 },
-  type: 'prompt',
-});
-
-starterGraph.addNode('c', {
-  data: { prompts: ['of the Spanish American war?'] },
-  position: { x: defaultIncrementX * 2, y: 0 },
-  type: 'prompt',
-});
-
-starterGraph.addNode('d', {
-  data: { prompts: ['Explain in essay format', ''] },
-  position: { x: defaultIncrementX * 3, y: 0 },
-  type: 'prompt',
-});
-
-starterGraph.addDirectedEdgeWithKey('ab', 'a', 'b');
-starterGraph.addDirectedEdgeWithKey('bc', 'b', 'c');
-starterGraph.addDirectedEdgeWithKey('cd', 'c', 'd');
 
 export const useNodeStore = create<RFState>((set, get) => ({
   graph: starterGraph,
@@ -115,7 +93,7 @@ export const useNodeStore = create<RFState>((set, get) => ({
         data: { prompts: [''] },
         type: 'prompt',
         position: {
-          x: baseNodePos.x,
+          x: -defaultX,
           y: baseNodePos.y,
         },
       },
