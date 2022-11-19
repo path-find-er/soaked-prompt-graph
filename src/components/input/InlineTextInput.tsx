@@ -6,7 +6,6 @@ import { useNodeStore } from '@/utils/flow/nodeGraph';
 type InlineTextInputProps = {
   prompt: string;
   className?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 } & React.ComponentPropsWithoutRef<'div'>;
 
 export const avgCharWidth = 10;
@@ -15,22 +14,46 @@ export const avgSpaceWidth = 2;
 const InlineTextInput: React.FC<InlineTextInputProps> = ({
   className,
   prompt,
-  onChange,
 }) => {
   const [inputValues, setInputValues] = useState([prompt]);
-  const resizeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
     setInputValues((prev) => {
-      const newInputValues = [...prev];
-      return newInputValues;
+      const newValues = [...prev];
+      newValues[index] = e.target.value;
+      console.log(newValues);
+      return newValues;
     });
     const inputContainerWidth = e.target.parentElement?.clientWidth;
     if (!inputContainerWidth) return;
 
     const style = e.target.style;
     const value = e.target.value;
-    const numSpaces = (value.match(/ /g) || []).length;
-    // const numLines = (value.match(/\n/g) || []).length;
+
     const numChars = (value.match(/./g) || []).length;
+    const numSpaces = (value.match(/ /g) || []).length;
+
+    const maxChars = Math.floor(inputContainerWidth / avgCharWidth);
+    if (numChars < maxChars) {
+      // calculate how max spaces we can fit
+      const maxSpaces = Math.floor(
+        (inputContainerWidth - numChars * avgCharWidth) / avgSpaceWidth
+      );
+
+      if (numSpaces < maxSpaces) {
+        style.width = `${
+          numChars * avgCharWidth + numSpaces * avgSpaceWidth
+        }px`;
+      } else {
+        // split on the last valid space
+        // const lastSpaceIndex =
+        style.width = `${inputContainerWidth}px`;
+      }
+    }
+    // const numLines = (value.match(/\n/g) || []).length;
 
     // the max width of the input is the width of inputContainerWidth
 
@@ -43,17 +66,12 @@ const InlineTextInput: React.FC<InlineTextInputProps> = ({
     } else {
       style.width = `${newWidth}px`;
     }
-
-    // handle onchange
-    if (onChange) {
-      onChange(e);
-    }
   };
 
   const { graph, reactFlowNodes, updatePrompt } = useNodeStore();
   const id = useId();
   return (
-    <div
+    <span
       id={`${id}-input-countainer`}
       className={clsxm('h-full w-full', className)}
     >
@@ -62,23 +80,19 @@ const InlineTextInput: React.FC<InlineTextInputProps> = ({
           key={i}
           id={`${id}-input`}
           type='textarea'
-          defaultValue={prompt}
-          onChange={resizeInput}
-          className='m-0 border-none bg-gray-100 px-[4px] py-0  font-mono'
+          value={inputValue}
+          onChange={(e) => handleOnChange(e, i)}
+          className='m-1 border-none bg-primary-50 px-[4px] py-0  font-mono'
           style={{
             appearance: 'none',
             fontSize: `${avgCharHeight}px`,
             fontKerning: 'none',
             letterSpacing: '1px',
             wordSpacing: `${avgSpaceWidth}px`,
-            // wrap the text
-            whiteSpace: 'pre-wrap',
-            // break the text
-            wordBreak: 'break-word',
           }}
         />
       ))}
-    </div>
+    </span>
   );
 };
 

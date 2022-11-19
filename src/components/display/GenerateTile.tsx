@@ -7,7 +7,6 @@ import clsxm from '@/utils/clsxm';
 
 import ButtonCustom from '../buttons/ButtonCustom';
 import { ApiKeyAtom } from '../input/ApiInputGroup';
-import InlineTextInput from '../input/InlineTextInput';
 
 type GenerateTileProps = {
   prompt: string;
@@ -93,7 +92,7 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
       </div>
 
       <div className='flex flex-col space-y-2  overflow-y-auto'>
-        <InlineTextInput prompt='completion' />
+        {/* <InlineTextInput prompt='completion' /> */}
         {completionArray.map((completion, i) => (
           <Card key={i} className='text-xs shadow'>
             {completion}
