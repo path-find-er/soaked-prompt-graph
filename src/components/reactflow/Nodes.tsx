@@ -7,30 +7,28 @@ import 'reactflow/dist/base.css';
 
 // import uuidv4
 import clsxm from '@/utils/clsxm';
-import { useNodeStore } from '@/utils/flow/nodeGraph';
+import type { direction } from '@/utils/graph/store';
+import { useGraphStore } from '@/utils/graph/store';
 
 import CustomHandle from './Handles';
-import TextAreaGroup from '../input/TextAreaGroup';
+import NodeTextArea from '../inputs/NodeTextArea';
 
-type nodePropsPrompt = {
+type nodePropsPromptSegment = {
   data: Record<string, string[]>;
   id: string;
   className?: string;
 } & React.ComponentPropsWithoutRef<'div'>;
 
-const PrompNode: React.FC<nodePropsPrompt> = ({ data, id, className }) => {
-  const {
-    graph,
-    handleAddNode,
-    removeNode,
-    updatePrompt,
-    addPrompt,
-    removePrompt,
-  } = useNodeStore();
+const SegmentNode: React.FC<nodePropsPromptSegment> = ({
+  data,
+  id,
+  className,
+}) => {
+  const { graph, update, add, remove } = useGraphStore();
 
   const [hideDelete, setHideDelete] = useState(graph.order > 1);
 
-  const prompts = data.prompts;
+  const promptSegments = data.promptSegments;
 
   useEffect(() => {
     setHideDelete(graph.order > 1);
@@ -39,43 +37,60 @@ const PrompNode: React.FC<nodePropsPrompt> = ({ data, id, className }) => {
   const onChange = useCallback(
     (evt: { target: { value: string } }, index: number) => {
       const { value } = evt.target;
-      updatePrompt(id, value, index);
+      update.promptSegment(id, value, index);
     },
-    [updatePrompt, id]
+    [id, update]
   );
 
+  const handleRemoveSegmentTextArea = (index: number) => {
+    remove.promptSegments(id, index);
+  };
+  const handleAddSegmentTextArea = () => {
+    add.promptSegment(id);
+  };
+
+  const handleAddNode = (direction: direction) => {
+    add.node(id, direction);
+  };
+
+  const handleRemoveNode = () => {
+    remove.node(id);
+  };
+
   return (
-    <div className={clsxm('group/node relative', className)}>
+    <div className={clsxm('group/node relative', className)} id={id}>
       <div className=' flex flex-row space-x-[10px] rounded-xl bg-gray-100 p-[20px]'>
-        {prompts
-          ? prompts.map((prompt: string | undefined, index: number) => {
-              return (
-                <TextAreaGroup
-                  key={`node-${id}-prompt-${index}`}
-                  nodeId={id}
-                  prompt={prompt}
-                  index={index}
-                  onRemove={removePrompt}
-                  onChange={onChange}
-                  canDelete={prompts.length > 1}
-                />
-              );
-            })
+        {promptSegments
+          ? promptSegments.map(
+              (promptSegment: string | undefined, index: number) => {
+                return (
+                  <NodeTextArea
+                    key={`node-${id}-promptSegment-${index}`}
+                    nodeId={id}
+                    promptSegment={promptSegment}
+                    index={index}
+                    onRemove={handleRemoveSegmentTextArea}
+                    canDelete={promptSegments.length > 1}
+                    onChange={onChange}
+                  />
+                );
+              }
+            )
           : null}
       </div>
 
       <CustomHandle
-        type='target'
+        type='source'
         position={Position.Top}
         id={`${id}`}
-        onClick={() => handleAddNode('start', id)}
+        onClick={() => handleAddNode('up')}
       />
       <button
-        aria-label='Add Prompt'
+        aria-label='Add PromptSegment'
         className='absolute inset-y-[20px] right-0 flex w-5 cursor-pointer items-center justify-center rounded-r-md bg-green-400 text-white'
-        onClick={() => addPrompt(id)}
+        onClick={handleAddSegmentTextArea}
       >
-        <span aria-label='Add Prompt'>+</span>
+        <span aria-label='Add PromptSegment'>+</span>
       </button>
 
       <button
@@ -86,23 +101,23 @@ const PrompNode: React.FC<nodePropsPrompt> = ({ data, id, className }) => {
             hidden: !hideDelete,
           }
         )}
-        onClick={() => removeNode(id)}
+        onClick={handleRemoveNode}
       >
         <span aria-label='Remove Node'> - </span>
       </button>
 
       <CustomHandle
-        type='source'
+        type='target'
         position={Position.Bottom}
         id={`${id}`}
-        onClick={() => handleAddNode('end', id)}
+        onClick={() => handleAddNode('down')}
       />
     </div>
   );
 };
 
-export default PrompNode;
+export default SegmentNode;
 
 export const nodeTypes = {
-  prompt: PrompNode,
+  promptSegment: SegmentNode,
 } as NodeTypes;

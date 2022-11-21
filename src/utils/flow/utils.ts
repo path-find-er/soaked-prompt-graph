@@ -89,8 +89,8 @@ export const fetchLinkList = (id: string, graph: DirectedGraph) => {
 
 export const addNode = (node: Node, graph: DirectedGraph) => {
   const { id, position } = node;
-  const data = { prompts: [''] };
-  const type = 'prompt';
+  const data = { promptSegments: [''] };
+  const type = 'promptSegment';
   graph.addNode(id, { data, position, type });
 
   return graph;
@@ -111,13 +111,18 @@ export const removeEdge = (id: string, graph: DirectedGraph) => {
   return graph;
 };
 
-const centerNode = (id: string, promptCount: number, graph: DirectedGraph) => {
+const centerNode = (
+  id: string,
+  promptSegmentCount: number,
+  graph: DirectedGraph
+) => {
   // 1. nodes are a minimum of 300px + ( 20px padding ) * 2 apart = 340px
   // 2. each aditional node intoduces 10px spacing bewteen itself and the previous node
   // we have to shift the nodes back to center by computing the new total width / 2 and subtracting it from 0.
   const { position } = graph.getNodeAttributes(id);
 
-  const totalWidth = minNodeWidth + additionalNodeWidth * (promptCount - 1);
+  const totalWidth =
+    minNodeWidth + additionalNodeWidth * (promptSegmentCount - 1);
   const shift = totalWidth / 2;
 
   graph.mergeNodeAttributes(id, {
@@ -127,44 +132,48 @@ const centerNode = (id: string, promptCount: number, graph: DirectedGraph) => {
   return graph;
 };
 
-export const removePrompt = (
+export const removePromptSegment = (
   id: string,
   index: number,
   graph: DirectedGraph
 ) => {
-  const prompts = graph.getNodeAttribute(id, 'data').prompts;
+  const promptSegments = graph.getNodeAttribute(id, 'data').promptSegments;
 
-  // each node must have at least one prompt
-  if (prompts === 1) {
+  // each node must have at least one promptSegment
+  if (promptSegments === 1) {
     return;
   }
-  prompts.splice(index, 1);
-  graph.setNodeAttribute(id, 'data', { prompts });
+  promptSegments.splice(index, 1);
+  graph.setNodeAttribute(id, 'data', { promptSegments });
 
-  // center nodes after removing a prompt
-  const centeredGraph = centerNode(id, prompts.length, graph);
-
-  return centeredGraph;
-};
-
-export const addPrompt = (id: string, prompt = '', graph: DirectedGraph) => {
-  const prompts = graph.getNodeAttribute(id, 'data').prompts;
-  prompts.push(prompt);
-  graph.setNodeAttribute(id, 'data', { prompts });
-
-  const centeredGraph = centerNode(id, prompts.length, graph);
+  // center nodes after removing a promptSegment
+  const centeredGraph = centerNode(id, promptSegments.length, graph);
 
   return centeredGraph;
 };
 
-export const updatePrompt = (
+export const addPromptSegment = (
   id: string,
-  prompt: string,
+  promptSegment = '',
+  graph: DirectedGraph
+) => {
+  const promptSegments = graph.getNodeAttribute(id, 'data').promptSegments;
+  promptSegments.push(promptSegment);
+  graph.setNodeAttribute(id, 'data', { promptSegments });
+
+  const centeredGraph = centerNode(id, promptSegments.length, graph);
+
+  return centeredGraph;
+};
+
+export const updatePromptSegment = (
+  nodeId: string,
+  promptSegment: string,
   index: number,
   graph: DirectedGraph
 ) => {
-  const prompts = graph.getNodeAttribute(id, 'data').prompts;
-  prompts[index] = prompt;
-  graph.setNodeAttribute(id, 'data', { prompts });
+  const promptSegments = graph.getNodeAttribute(nodeId, 'data').promptSegments;
+  promptSegments[index] = promptSegment;
+  graph.setNodeAttribute(nodeId, 'data', { promptSegments });
   return graph;
 };

@@ -1,7 +1,7 @@
 import { type NextPage } from 'next';
 import Head from 'next/head';
 
-import DesignTemplate from '@/components/pageSections/DesignTemplate';
+import GraphEditor from '@/components/pageSections/GraphEditor';
 import TryPrompts from '@/components/pageSections/TryPrompts';
 
 import Layout from '../components/layout/Layout';
@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Layout>
-        <DesignTemplate />
+        <GraphEditor />
         <TryPrompts className='h-[100vh]' />
       </Layout>
     </>

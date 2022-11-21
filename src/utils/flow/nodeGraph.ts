@@ -7,20 +7,20 @@ import 'reactflow/dist/style.css';
 
 import { defaultIncrementX, defaultX } from './utils';
 import {
-  addPrompt,
+  addPromptSegment,
   fetchLinkList,
-  removePrompt,
+  removePromptSegment,
   shift,
   shiftTowards,
-  updatePrompt,
+  updatePromptSegment,
 } from './utils';
 
 const starterGraph = new DirectedGraph();
 
 starterGraph.addNode('a', {
-  data: { prompts: [''] },
+  data: { promptSegments: [''] },
   position: { x: -defaultX + defaultIncrementX * 0, y: 0 },
-  type: 'prompt',
+  type: 'promptSegment',
 });
 
 export const useNodeStore = create<RFState>((set, get) => ({
@@ -70,16 +70,23 @@ export const useNodeStore = create<RFState>((set, get) => ({
     }
   },
 
-  updatePrompt: (id: string, prompt: string, index: number) => {
-    set({ graph: updatePrompt(id, prompt, index, get().graph) });
+  updatePromptSegment: (id: string, promptSegment: string, index: number) => {
+    set({ graph: updatePromptSegment(id, promptSegment, index, get().graph) });
   },
 
-  removePrompt: (id: string, index: number) => {
-    set({ graph: removePrompt(id, index, get().graph) });
+  removePromptSegment: (id: string, index: number) => {
+    set({ graph: removePromptSegment(id, index, get().graph) });
   },
 
-  addPrompt: (id: string, prompt = '') => {
-    set({ graph: addPrompt(id, prompt, get().graph) });
+  addPromptSegment: (id: string, promptSegment = '') => {
+    set({ graph: addPromptSegment(id, promptSegment, get().graph) });
+  },
+
+  resetGraph: () => {
+    // if the graph has more than one node, clear it
+    if (get().graph.order > 1) {
+      set({ graph: starterGraph });
+    }
   },
 
   handleAddNode: (direction: 'start' | 'end', baseNodeId: string) => {
@@ -90,8 +97,8 @@ export const useNodeStore = create<RFState>((set, get) => ({
     const newNode = {
       id: uuidv4(),
       atritbutes: {
-        data: { prompts: [''] },
-        type: 'prompt',
+        data: { promptSegments: [''] },
+        type: 'promptSegment',
         position: {
           x: -defaultX,
           y: baseNodePos.y,
@@ -124,35 +131,39 @@ export const useNodeStore = create<RFState>((set, get) => ({
       set({ graph: newGraph });
     }
   },
-  fetchFullPrompts: () => {
-    return fetchFullPrompts(get().graph).reverse();
+  fetchPrompts: () => {
+    return fetchPrompts(get().graph);
   },
 }));
 
 type RFState = {
   graph: DirectedGraph;
   setGraph: (graph: DirectedGraph) => void;
+  resetGraph: () => void;
   reactFlowNodes: () => Node[];
   reactFlowEdges: () => Edge[];
-  updatePrompt: (id: string, prompt: string, index: number) => void;
-  removePrompt: (id: string, index: number) => void;
-  addPrompt: (id: string, prompt?: string) => void;
+  updatePromptSegment: (
+    id: string,
+    promptSegment: string,
+    index: number
+  ) => void;
+  removePromptSegment: (id: string, index: number) => void;
+  addPromptSegment: (id: string, promptSegment?: string) => void;
   removeNode: (id: string) => void;
   handleAddNode: (direction: 'start' | 'end', baseNodeId: string) => void;
-  fetchFullPrompts: () => string[];
+  fetchPrompts: () => string[];
 };
 
-// 1. each node can contain multiple prompts stored at attributes.data.prompts in an array
+// 1. each node can contain multiple promptSegments stored at attributes.data.promptSegments in an array
 // 2. each node can have multiple inbound and outbound edges
-// 3. every node must have at least one prompt
-// 4. every concat prompts path must start with a node that has no inbound edges and end with a node that has no outbound edges { if there is only one node in the graph, it is both the start and end node }
-// 5. every concat prompts path is a single path, through the graph, and concatenates all prompts in the order of the path but only one from each node
+// 3. every node must have at least one promptSegment
+// 4. every concat promptSegments path must start with a node that has no inbound edges and end with a node that has no outbound edges { if there is only one node in the graph, it is both the start and end node }
+// 5. every concat promptSegments path is a single path, through the graph, and concatenates all promptSegments in the order of the path but only one from each node
 
 // define a function that takes in the graph and uses recursion to find all paths from the start node to the end node
 // it returns an array of every paths concatenated string
 
-const fetchFullPrompts = (graph: DirectedGraph) => {
-  // identify the start node
+const fetchPrompts = (graph: DirectedGraph) => {
   const startNodeId = graph.nodes().find((node) => {
     return graph.inDegree(node) === 0;
   });
@@ -161,64 +172,48 @@ const fetchFullPrompts = (graph: DirectedGraph) => {
     return [];
   }
 
-  // identify the prompts of the start node
-  const startNodePrompts = graph.getNodeAttribute(startNodeId, 'data').prompts;
+  const startNodePromptSegments = graph.getNodeAttribute(
+    startNodeId,
+    'data'
+  ).promptSegments;
 
-  // define a recursive function that takes in a node and returns an array of all paths from that node to the end node
-  const fetchPrompts = (nodeId: string, prompts: string[]): string[] => {
-    // identify the outbound edges of the node
+  const fetchPrompts = (nodeId: string, promptSegments: string[]): string[] => {
     const outboundEdge = graph.outEdges(nodeId)[0];
 
     if (!outboundEdge) {
-      // remove trailing whitespace
-      return prompts.map((prompt) => prompt.trim());
+      return promptSegments.map((promptSegment) => promptSegment.trim());
     }
 
     const targetNodeId = graph.target(outboundEdge);
-    const targetNodePrompts = graph.getNodeAttribute(
+
+    const targetNodePromptSegments = graph.getNodeAttribute(
       targetNodeId,
       'data'
-    ).prompts;
+    ).promptSegments;
 
-    // itterate through each prompt of the target node and concat it with each prompt of the current node
-    const newPrompts = concatPrompts(prompts, targetNodePrompts);
+    const newPromptSegments = concatPromptSegments(
+      promptSegments,
+      targetNodePromptSegments
+    );
 
-    return fetchPrompts(targetNodeId, newPrompts);
+    return fetchPrompts(targetNodeId, newPromptSegments);
   };
 
-  return fetchPrompts(startNodeId, startNodePrompts);
+  return fetchPrompts(startNodeId, startNodePromptSegments);
 };
 
-const concatPrompts = (oldNodePrompts: string[], newNodePrompts: string[]) => {
-  const newPrompts: string[] = [];
+const concatPromptSegments = (
+  oldNodePromptSegments: string[],
+  newNodePromptSegments: string[]
+) => {
+  const newPromptSegments: string[] = [];
 
-  for (let i = 0; i < oldNodePrompts.length; i++) {
-    for (let j = 0; j < newNodePrompts.length; j++) {
-      newPrompts.push(oldNodePrompts[i] + ' ' + newNodePrompts[j]);
+  for (let i = 0; i < oldNodePromptSegments.length; i++) {
+    for (let j = 0; j < newNodePromptSegments.length; j++) {
+      newPromptSegments.push(
+        oldNodePromptSegments[i] + ' ' + newNodePromptSegments[j]
+      );
     }
   }
-  return newPrompts;
+  return newPromptSegments;
 };
-
-/*
-  // identify the start node prompts
-  const startNodePrompts = graph.getNodeAttribute(startNodeId, 'data').prompts;
-
-  // identify the edge that connects the start node to the next node
-  const outEdges = graph.outEdges(startNodeId);
-
-  if (outEdges.length === 0) {
-    return startNodePrompts;
-  }
-
-  const nextNodeId = graph.target(outEdges[0]);
-  const nextNodePrompts = graph.getNodeAttribute(nextNodeId, 'data').prompts;
-
-  // map each prompt in the start node to each prompt in the next node
-  startNodePrompts.forEach((startPrompt: string) => {
-    nextNodePrompts.forEach((nextPrompt: string) => {
-      fullPrompts.push(startPrompt + ' ' + nextPrompt);
-    });
-  });
-
-  */

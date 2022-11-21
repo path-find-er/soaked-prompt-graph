@@ -1,6 +1,7 @@
 import { atom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { Octokit } from 'octokit';
+import { useState } from 'react';
 
 // set up a github octokit atom with the octokit instance
 const githubOctokitAtom = atom<Octokit>(
