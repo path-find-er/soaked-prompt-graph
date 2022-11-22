@@ -85,8 +85,6 @@ const completion = async (
   });
 
   const openai = new OpenAIApi(configuration);
-  console.log('req.body', req.body);
-  console.log('openai', openai);
 
   const completion = await openai.createCompletion({
     model: 'text-davinci-002',

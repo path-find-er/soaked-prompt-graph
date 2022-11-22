@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       </Head>
       <Layout>
         <GraphEditor />
-        <TryPrompts className='h-[100vh]' />
+        <TryPrompts className='' />
       </Layout>
     </>
   );

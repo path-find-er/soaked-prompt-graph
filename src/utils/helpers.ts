@@ -1,16 +1,44 @@
 import DirectedGraph from 'graphology';
-export const saveGraph = (graph: DirectedGraph) => {
-  const exportGraph = graph.export();
-  localStorage.setItem('prompt-engine-nodes', JSON.stringify(exportGraph));
+
+import { buildStarterGraph } from './graph/store';
+
+export const localStorageGraphName = 'prompt-engine-nodes';
+// function to load the graph from local storage
+export const loadGraph = (name: string) => {
+  try {
+    const graph = new DirectedGraph();
+    const graphForImport = localStorage.getItem(localStorageGraphName);
+    if (graphForImport) {
+      const parsedGraph = JSON.parse(graphForImport);
+      const graphToImport = parsedGraph[name];
+      graph.import(graphToImport);
+    }
+    return graph;
+  } catch (error) {
+    return buildStarterGraph();
+  }
 };
 
-// function to load the graph from local storage
-export const loadGraph = () => {
-  const graph = new DirectedGraph();
-  const graphForImport = localStorage.getItem('prompt-engine-nodes');
+export const saveGraph = (graph: DirectedGraph, name: string) => {
+  // load the exisitng saved graphs
+  const graphForImport = localStorage.getItem(localStorageGraphName);
+  let parsedGraph: Record<string, any> = {};
+  if (graphForImport) {
+    parsedGraph = JSON.parse(graphForImport);
+  }
+
+  // add the new graph to the existing graphs
+  parsedGraph[name] = graph.export();
+
+  // save the new graph
+  localStorage.setItem('prompt-engine-nodes', JSON.stringify(parsedGraph));
+};
+
+export const checkForGraph = (name: string) => {
+  const graphForImport = localStorage.getItem(localStorageGraphName);
   if (graphForImport) {
     const parsedGraph = JSON.parse(graphForImport);
-    graph.import(parsedGraph);
+    return parsedGraph[name];
   }
-  return graph;
+  return false;
 };

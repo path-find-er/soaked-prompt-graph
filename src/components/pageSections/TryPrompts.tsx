@@ -15,7 +15,7 @@ const TryPrompts: FC<TryPromptsProps> = ({ className }) => {
   const { prompts } = useGraphStore();
 
   return (
-    <section className={clsxm('rounded-x h-[70vh] w-full p-5', className)}>
+    <section className={clsxm('rounded-x w-full p-5', className)}>
       <>
         <div className='mb-2 w-full text-center'>
           <Label htmlFor='api-key' className=''>
@@ -26,9 +26,8 @@ const TryPrompts: FC<TryPromptsProps> = ({ className }) => {
 
         <h3 className='flex items-center py-3'> Try prompts: </h3>
 
-        <div className=' flex h-full w-full space-x-3 overflow-auto rounded-xl bg-white p-4'>
+        <div className=' flex h-full w-full flex-col space-y-5 overflow-auto rounded-xl border-2 border-white p-4 sm:flex-row sm:space-y-0 sm:space-x-3'>
           {prompts().map((prompt, i) => {
-            console.log(prompt);
             return <GenerateTile key={i} prompt={prompt} className='flex-1' />;
           })}
         </div>

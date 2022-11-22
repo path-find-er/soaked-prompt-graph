@@ -24,8 +24,17 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
 
   const [completionArray, setCompletionArray] = useState<string[]>([]);
 
-  const promptArr = prompt.map((promptSegment) => promptSegment.segment);
-  const promptAsText = promptArr.join(' ');
+  const deleteCompletion = (index: number) => {
+    setCompletionArray((prev) => {
+      const newArr = [...prev];
+      newArr.splice(index, 1);
+      return newArr;
+    });
+  };
+
+  const promptAsText = prompt
+    .map((promptSegment) => promptSegment.segment)
+    .join(' ');
 
   const handleCompletion = async () => {
     if (!apiKey) {
@@ -45,38 +54,59 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
   return (
     <div
       className={clsxm(
-        ' flex h-full  min-w-[300px] max-w-prose flex-col space-y-5 rounded-lg border p-5 sm:min-w-[600px]',
+        ' flex h-full min-h-[500px] w-full min-w-[100%] max-w-prose flex-col space-y-5 rounded-lg border bg-white p-5 text-xs sm:min-w-[40%]',
         className
       )}
     >
-      <MagicTextArea promptAsText={promptAsText} prompt={prompt} />
+      {promptAsText === '' ? (
+        <Card className='m-1 rounded bg-primary-50 bg-opacity-25 px-1'>
+          Enter your prompt segment in template ^ above ^ to generate a prompt
+          here
+        </Card>
+      ) : (
+        <>
+          <div className='flex flex-col items-start justify-between space-y-4'>
+            <MagicTextArea prompt={prompt} />
 
-      <div className='flex items-center space-x-3'>
-        <ButtonCustom
-          variant='primary'
-          className=' mb-auto'
-          onClick={handleCompletion}
-          isLoading={loading}
-        >
-          Generate
-        </ButtonCustom>
-        <input
-          type='number'
-          // no negative numbers
-          min='1'
-          value={nResults}
-          onChange={(e) => setnResults(Number(e.target.value))}
-          className='h-9 w-14 appearance-none  text-black'
-        />
-      </div>
+            <div className='flex items-center space-x-3'>
+              <ButtonCustom
+                variant='primary'
+                className=' mb-auto'
+                onClick={handleCompletion}
+                isLoading={loading}
+              >
+                Generate
+              </ButtonCustom>
+              <input
+                type='number'
+                // no negative numbers
+                min='1'
+                value={nResults}
+                onChange={(e) => setnResults(Number(e.target.value))}
+                className='h-9 w-14 appearance-none  text-black'
+              />
+            </div>
+          </div>
 
-      <div className='flex flex-col space-y-2  overflow-y-auto'>
-        {completionArray.map((completion, i) => (
-          <Card key={i} className='text-xs shadow'>
-            {completion}
-          </Card>
-        ))}
-      </div>
+          <div className='flex flex-row space-x-2 overflow-auto sm:flex-col sm:space-x-0  sm:space-y-2'>
+            {completionArray.map((completion, i) => (
+              <div
+                key={i}
+                className='relative h-fit min-w-[80%] rounded-r-lg rounded-b-lg border  border-gray-300 p-4 text-left text-xs font-normal shadow hover:scale-100'
+              >
+                {promptAsText} <strong> {completion} </strong>
+                {/* delete btn */}
+                <button
+                  onClick={() => deleteCompletion(i)}
+                  className='absolute top-0 left-0 z-10 h-4 w-4 rounded-br-lg bg-gray-300 text-xs text-white hover:bg-red-900'
+                >
+                  -
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
@@ -116,21 +146,19 @@ const MagicTextArea: React.FC<MagicTextAreaProps> = ({ prompt }) => {
   const handleUpdate = (nodeId: string, segment: string, index: number) => {
     update.promptSegment(nodeId, segment, index);
   };
-  const promptAsText = prompt
-    .map((promptSegment) => promptSegment.segment)
-    .join(' ');
+
   return (
     <>
       <ButtonCustom
         variant='outline'
-        className='flex flex-row flex-wrap overflow-hidden rounded-lg p-4 text-left font-normal shadow hover:scale-100'
+        className='inline rounded-lg border-gray-300 p-4 text-left font-normal shadow hover:scale-100'
         title='Click to edit prompt'
         onClick={() => setModalOpen(true)}
       >
-        {prompt.map(({ segment, nodeId, index }, i) => (
+        {prompt.map(({ segment }, i) => (
           <span
             key={i}
-            className='m-1 rounded bg-primary-50 bg-opacity-25 px-1'
+            className='mr-1 rounded bg-primary-50 bg-opacity-25 px-1'
           >
             {segment}
           </span>
@@ -152,13 +180,13 @@ const MagicTextArea: React.FC<MagicTextAreaProps> = ({ prompt }) => {
               const { segment, index, nodeId } = promptSegment;
               return (
                 <>
-                  <Badge key={i} className='w-min'>
-                    {1}
+                  <Badge key={i} className='w-max'>
+                    {i + 1}
                   </Badge>
                   <Textarea
                     key={i}
                     className='m-2 w-full !bg-white shadow-sm'
-                    defaultValue={segment}
+                    value={segment}
                     rows={5}
                     onChange={(e) =>
                       handleUpdate(nodeId, e.target.value, index)
