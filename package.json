@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "postbuild": "next-sitemap",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
@@ -16,8 +17,7 @@
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "release": "standard-version",
-    "push-release": "git push --follow-tags origin main",
-    "postbuild": "next-sitemap"
+    "push-release": "git push --follow-tags origin main"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.4",
@@ -72,7 +72,7 @@
     "eslint-plugin-unused-imports": "^1.1.5",
     "jest": "^27.5.1",
     "lint-staged": "^11.2.6",
-    "next-sitemap": "^1.9.12",
+    "next-sitemap": "^3.1.32",
     "octokit": "^2.0.10",
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
