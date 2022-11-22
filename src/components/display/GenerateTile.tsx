@@ -158,7 +158,7 @@ const MagicTextArea: React.FC<MagicTextAreaProps> = ({ prompt }) => {
         {prompt.map(({ segment }, i) => (
           <span
             key={i}
-            className='mr-1 rounded bg-primary-50 bg-opacity-25 px-1'
+            className='mr-1 mt-2 rounded border bg-primary-50 bg-opacity-25  px-1'
           >
             {segment}
           </span>
