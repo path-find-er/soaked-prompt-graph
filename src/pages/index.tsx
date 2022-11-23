@@ -1,5 +1,6 @@
 import { type NextPage } from 'next';
 import Head from 'next/head';
+import { Suspense } from 'react';
 
 import GraphEditor from '@/components/pageSections/GraphEditor';
 import TryPrompts from '@/components/pageSections/TryPrompts';
@@ -15,8 +16,10 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Layout>
-        <GraphEditor />
-        <TryPrompts className='' />
+        <Suspense fallback={<div>Loading...</div>}>
+          <GraphEditor />
+          <TryPrompts className='' />
+        </Suspense>
       </Layout>
     </>
   );

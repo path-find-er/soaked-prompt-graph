@@ -11,18 +11,20 @@ import { checkForGraph, loadGraph, saveGraph } from '@/utils/helpers';
 
 type GraphEditorProps = {
   className?: string;
-} & React.ComponentPropsWithoutRef<'section'>;
+} & React.ComponentPropsWithoutRef<'div'>;
 
 const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
   const { reactFlow } = useGraphStore();
 
+  const [openG, setOpen] = useState(true);
+
   return (
-    <section
-      className={clsxm('rounded-x mt-2 h-full w-full sm:p-2', className)}
-    >
-      <>
-        <Disclosure defaultOpen>
-          {({ open }) => (
+    <div className={clsxm('rounded-x mt-2 h-full w-full sm:p-2', className)}>
+      <Disclosure as='div' defaultOpen>
+        {({ open }) => {
+          setOpen(open);
+
+          return (
             <>
               <Disclosure.Panel className='text-gray-500'>
                 <div className='flex'>
@@ -57,21 +59,22 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
                   className={clsxm(
                     'flex w-full justify-center rounded-b-3xl text-center text-xs hover:scale-100',
                     {
-                      'fixed bottom-2 rounded-b-lg': !open,
+                      'fixed bottom-2 z-40 max-w-sm rounded-b-md text-lg':
+                        !openG,
                     }
                   )}
                 >
-                  {open ? 'Hide' : 'Show'} template area
+                  {openG ? 'Hide' : 'Show'} template area
                 </ButtonCustom>
               </Disclosure.Button>
             </>
-          )}
-        </Disclosure>
-        <GraphSaveBar />
+          );
+        }}
+      </Disclosure>
+      <GraphSaveBar />
 
-        <hr className='border-white' />
-      </>
-    </section>
+      <hr className='border-white' />
+    </div>
   );
 };
 
