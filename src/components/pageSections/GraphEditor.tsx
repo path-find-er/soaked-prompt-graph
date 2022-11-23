@@ -15,13 +15,13 @@ type GraphEditorProps = {
 const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
   const { reactFlow } = useGraphStore();
 
-  const [openTemplateArea, setOpenTemplateArea] = useState(true);
+  const [closeTemplateArea, setCloseTemplateArea] = useState(false);
 
   return (
     <div className={clsxm('rounded-x mt-2 h-full w-full sm:p-2', className)}>
-      <div className={clsxm('flex flex-col', [openTemplateArea && 'hidden'])}>
+      <div className={clsxm('flex flex-col', [closeTemplateArea && 'hidden'])}>
         <ReactFlow
-          className=' h-full min-h-[80vh] w-full rounded-xl bg-white'
+          className=' h-full max-h-[600px] min-h-[70vh] w-full rounded-xl bg-white'
           nodes={reactFlow.nodes()}
           edges={reactFlow.edges()}
           // onNodesChange={(nodeChanges) => {
@@ -47,19 +47,19 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
       </div>
       <ButtonCustom
         variant='light'
-        onClick={() => setOpenTemplateArea(!openTemplateArea)}
+        onClick={() => setCloseTemplateArea(!closeTemplateArea)}
         className={clsxm(
           'my-2 flex w-full justify-center rounded-b-3xl text-center text-xs hover:scale-100',
           {
             'fixed inset-x-0 bottom-2 z-40 mx-auto max-w-sm rounded-b-md text-lg':
-              openTemplateArea,
+              closeTemplateArea,
           }
         )}
       >
-        {openTemplateArea ? 'Show' : 'Hide'} template area
+        {closeTemplateArea ? 'Show' : 'Hide'} template area
       </ButtonCustom>
       <GraphSaveBar
-        className={clsxm('flex flex-col', [openTemplateArea && 'hidden'])}
+        className={clsxm('flex flex-col', [closeTemplateArea && 'hidden'])}
       />
 
       <hr className='border-white' />

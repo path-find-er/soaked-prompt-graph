@@ -86,8 +86,8 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
     >
       {promptAsText === '' ? (
         <Card className='m-1 rounded bg-primary-50 bg-opacity-25 px-1'>
-          Enter your prompt segment in template ^ above ^ to generate a prompt
-          here
+          Enter your prompt segment in template area ^ above ^ to generate a
+          prompt here
         </Card>
       ) : (
         <>
