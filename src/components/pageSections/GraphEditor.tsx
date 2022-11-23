@@ -1,4 +1,3 @@
-import { Disclosure } from '@headlessui/react';
 import ReactFlow, { Background, Controls } from 'reactflow';
 
 import ButtonCustom from '@/components/buttons/ButtonCustom';
@@ -16,62 +15,51 @@ type GraphEditorProps = {
 const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
   const { reactFlow } = useGraphStore();
 
-  const [openG, setOpen] = useState(true);
+  const [openTemplateArea, setOpenTemplateArea] = useState(true);
 
   return (
     <div className={clsxm('rounded-x mt-2 h-full w-full sm:p-2', className)}>
-      <Disclosure as='div' defaultOpen>
-        {({ open }) => {
-          setOpen(open);
-
-          return (
-            <>
-              <Disclosure.Panel className='text-gray-500'>
-                <div className='flex'>
-                  <ReactFlow
-                    className=' h-full min-h-[80vh] w-full rounded-xl bg-white'
-                    nodes={reactFlow.nodes()}
-                    edges={reactFlow.edges()}
-                    // onNodesChange={(nodeChanges) => {
-                    //   reactFlow.onNodeChanges(nodeChanges);
-                    // }}
-                    // onEdgesChange={(edgeChanges) => {
-                    //   reactFlow.onEdgeChanges(edgeChanges);
-                    // }}
-                    nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
-                    proOptions={{ hideAttribution: true }}
-                    fitView
-                    draggable={false}
-                    // on touch devices panning is handles by touch-action: pan-x pan-y
-                    minZoom={0.1}
-                    maxZoom={10}
-                    zoomOnPinch={true}
-                  >
-                    <Controls />
-                    <Background gap={20} />
-                  </ReactFlow>
-                </div>
-              </Disclosure.Panel>
-              <Disclosure.Button className='my-2 flex w-full items-center justify-center rounded-lg '>
-                <ButtonCustom
-                  variant='light'
-                  className={clsxm(
-                    'flex w-full justify-center rounded-b-3xl text-center text-xs hover:scale-100',
-                    {
-                      'fixed bottom-2 z-40 max-w-sm rounded-b-md text-lg':
-                        !openG,
-                    }
-                  )}
-                >
-                  {openG ? 'Hide' : 'Show'} template area
-                </ButtonCustom>
-              </Disclosure.Button>
-            </>
-          );
-        }}
-      </Disclosure>
-      <GraphSaveBar />
+      <div className={clsxm('flex flex-col', [openTemplateArea && 'hidden'])}>
+        <ReactFlow
+          className=' h-full min-h-[80vh] w-full rounded-xl bg-white'
+          nodes={reactFlow.nodes()}
+          edges={reactFlow.edges()}
+          // onNodesChange={(nodeChanges) => {
+          //   reactFlow.onNodeChanges(nodeChanges);
+          // }}
+          // onEdgesChange={(edgeChanges) => {
+          //   reactFlow.onEdgeChanges(edgeChanges);
+          // }}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          proOptions={{ hideAttribution: true }}
+          fitView
+          draggable={false}
+          // on touch devices panning is handles by touch-action: pan-x pan-y
+          minZoom={0.1}
+          maxZoom={10}
+          zoomOnPinch={true}
+        >
+          <Controls />
+          <Background gap={20} />
+        </ReactFlow>
+      </div>
+      <ButtonCustom
+        variant='light'
+        onClick={() => setOpenTemplateArea(!openTemplateArea)}
+        className={clsxm(
+          'my-2 flex w-full justify-center rounded-b-3xl text-center text-xs hover:scale-100',
+          {
+            'fixed inset-x-0 bottom-2 z-40 mx-auto max-w-sm rounded-b-md text-lg':
+              openTemplateArea,
+          }
+        )}
+      >
+        {!openTemplateArea ? 'Hide' : 'Show'} template area
+      </ButtonCustom>
+      <GraphSaveBar
+        className={clsxm('flex flex-col', [openTemplateArea && 'hidden'])}
+      />
 
       <hr className='border-white' />
     </div>
