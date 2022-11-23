@@ -24,7 +24,7 @@ const TryPrompts: FC<TryPromptsProps> = ({ className }) => {
         </div>
         <ApiInputGroup />
 
-        <div className=' flex h-full w-full flex-col space-y-5 overflow-auto rounded-xl border-2 border-white p-2 sm:flex-row sm:space-y-0 sm:space-x-3 sm:p-4'>
+        <div className=' flex h-full w-full flex-col space-y-5 overflow-y-auto rounded-xl border-2 border-white p-2 sm:flex-row sm:space-y-0 sm:space-x-3 sm:p-4'>
           {prompts().map((prompt, i) => {
             return <GenerateTile key={i} prompt={prompt} />;
           })}

@@ -39,6 +39,7 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
           minZoom={0.1}
           maxZoom={10}
           zoomOnPinch={true}
+          zoomOnDoubleClick={false}
         >
           <Controls />
           <Background gap={20} />
@@ -55,7 +56,7 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
           }
         )}
       >
-        {!openTemplateArea ? 'Hide' : 'Show'} template area
+        {openTemplateArea ? 'Show' : 'Hide'} template area
       </ButtonCustom>
       <GraphSaveBar
         className={clsxm('flex flex-col', [openTemplateArea && 'hidden'])}

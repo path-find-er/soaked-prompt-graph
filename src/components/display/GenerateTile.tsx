@@ -80,7 +80,7 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
   return (
     <div
       className={clsxm(
-        ' flex h-full min-h-[500px] w-full max-w-prose flex-col space-y-5 rounded-lg border bg-white p-2 text-xs sm:min-w-[40%] sm:p-4',
+        ' flex h-full min-h-[500px] w-full max-w-prose flex-col space-y-5 overflow-y-auto overflow-x-hidden rounded-lg border bg-white p-2 text-xs sm:min-w-[40%] sm:p-4',
         className
       )}
     >
@@ -103,7 +103,7 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
               >
                 Generate
               </ButtonCustom>
-              <div>
+              <div className='w-full max-w-[220px]'>
                 <div className='flex items-center justify-end space-x-2'>
                   <p>count:</p>
                   <Badge className='text-xs'>{nResults}</Badge>
@@ -127,7 +127,7 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
                   ${estimatedPrice}
                 </Badge>
               </div>
-              <div>
+              <div className='w-full max-w-[220px]'>
                 <div className='flex items-center justify-end space-x-2'>
                   <p>tokens:</p>
                   <Badge className='text-xs'>{nTokens}</Badge>
@@ -145,13 +145,13 @@ const GenerateTile: React.FC<GenerateTileProps> = ({ className, prompt }) => {
             </div>
           </div>
 
-          <div className='flex flex-row space-x-2 overflow-auto sm:flex-col sm:space-x-0  sm:space-y-2'>
+          <div className='flex flex-row space-x-2 overflow-y-auto sm:flex-col sm:space-x-0 sm:space-y-2 sm:overflow-auto  sm:overflow-x-hidden'>
             {completionArray.map((completion, i) => (
               <div
                 key={i}
                 className='relative h-fit min-w-[80%] whitespace-pre-line break-words rounded-r-lg rounded-b-lg border  border-gray-300 p-4 text-left text-xs font-normal shadow hover:scale-100'
               >
-                <strong> {completion} </strong>
+                {completion}
                 {/* delete btn */}
                 <button
                   onClick={() => deleteCompletion(i)}
@@ -212,17 +212,17 @@ const MagicTextArea: React.FC<MagicTextAreaProps> = ({ prompt }) => {
     <>
       <ButtonCustom
         variant='outline'
-        className='inline-block w-full whitespace-pre break-words rounded-lg border-gray-300 p-2 text-left font-normal shadow hover:scale-100 sm:p-4'
+        className='flex w-full flex-col items-center justify-center gap-4 rounded-lg border-gray-300 p-4 text-left font-normal shadow hover:scale-100 sm:p-4'
         title='Click to edit prompt'
         onClick={() => setModalOpen(true)}
       >
         {prompt.map(({ segment }, i) => (
-          <span
+          <div
             key={i}
-            className=' mr-1 mt-2 inline-block whitespace-pre-wrap break-words rounded border bg-primary-50 bg-opacity-25 px-1  sm:inline'
+            className='w-full whitespace-pre-wrap break-words rounded border bg-primary-50 bg-opacity-25 p-1 sm:inline'
           >
             {segment}
-          </span>
+          </div>
         ))}
       </ButtonCustom>
 
@@ -234,7 +234,7 @@ const MagicTextArea: React.FC<MagicTextAreaProps> = ({ prompt }) => {
         <div className='fixed inset-0 bg-black bg-opacity-25' />
         <div className='fixed inset-0 overflow-y-auto'>
           <div className='flex min-h-full items-center justify-center p-10 text-center'>
-            <Dialog.Panel className='flex h-[70vh] w-full flex-col gap-4  overflow-y-auto rounded-lg bg-white p-5 text-center shadow'>
+            <Dialog.Panel className='flex h-[90vh] w-full flex-col gap-4  overflow-y-auto rounded-lg bg-white p-5 text-center shadow'>
               {/* Iteratate over prompt segments and display them in text areas, use global state to update prompt segments */}
               {prompt.map((promptSegment, i) => {
                 const { segment, index, nodeId } = promptSegment;
@@ -244,17 +244,17 @@ const MagicTextArea: React.FC<MagicTextAreaProps> = ({ prompt }) => {
                   <div className='flex flex-col gap-2 text-left' key={i}>
                     <Textarea
                       key={i}
-                      className='w-full !bg-white shadow-sm'
+                      className='w-full !bg-white text-xs shadow-sm'
                       value={segment}
-                      rows={5}
+                      rows={8}
                       onChange={(e) =>
                         handleUpdate(nodeId, e.target.value, index)
                       }
                     />
                     <div className='flex w-full flex-row items-center justify-start gap-2'>
-                      <p>estimate:</p>
-                      <Badge className='w-max bg-green-300 text-xs text-stone-900'>
-                        {estimatedPrice}
+                      <p>est cost:</p>
+                      <Badge className='w-max !bg-green-300 text-xs text-stone-900'>
+                        ${estimatedPrice.toFixed(3)}
                       </Badge>
                       <p>tokens:</p>
                       <Badge className='w-max text-xs'>{nTokens}</Badge>

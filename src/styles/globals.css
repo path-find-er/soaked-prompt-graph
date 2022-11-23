@@ -30,7 +30,7 @@
 
   body,
   .p {
-    @apply bg-primary-50 px-2 pb-20 text-sm text-primary-700;
+    @apply overflow-x-hidden bg-primary-50 px-2 pb-20 text-sm text-primary-700;
   }
   /* #endregion  /**======== Typography =========== */
 }
