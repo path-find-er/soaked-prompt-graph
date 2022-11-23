@@ -87,7 +87,7 @@ const SegmentNode: React.FC<nodePropsPromptSegment> = ({
       />
       <button
         aria-label='Add PromptSegment'
-        className='absolute inset-y-[20px] right-0 flex w-5 cursor-pointer items-center justify-center rounded-r-md bg-green-400 text-white'
+        className='absolute inset-y-[20px] right-0 flex w-5 cursor-pointer items-center justify-center rounded-r-md bg-green-200 text-black'
         onClick={handleAddSegmentTextArea}
       >
         <span aria-label='Add PromptSegment'>+</span>

@@ -35,7 +35,7 @@ const NodeTextArea: React.FC<NodeTextAreaProps> = ({
         className='sr-only'
       />
       <Textarea
-        className=' min-h-[200px] rounded-sm !border-gray-300 !bg-white !text-sm hover:!border-green-400'
+        className=' min-h-[200px] rounded-sm !border-gray-300 !bg-white !text-xs hover:!border-green-400'
         id={`${key}-textarea`}
         placeholder='Enter your prompt segment...'
         color='gray'

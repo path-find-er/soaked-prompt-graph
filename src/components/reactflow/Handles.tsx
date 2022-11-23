@@ -31,7 +31,7 @@ export const CustomHandle: React.FC<handleProps> = ({
         cursor: 'pointer',
       }}
       className={clsxm(
-        '!h-5 !w-10 !rounded-sm !bg-green-400 !text-white',
+        '!h-10 !w-16 !rounded-full !bg-green-200 !text-black',
         className,
         [position === 'top' && '!-top-5 !rounded-b-none'],
         [position === 'bottom' && '!-bottom-5 !rounded-t-none']
