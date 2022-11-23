@@ -1,6 +1,8 @@
 import { Label } from 'flowbite-react';
 import type { FC } from 'react';
 
+import ButtonLink from '@/components/buttons/links/ButtonLink';
+
 import clsxm from '@/utils/clsxm';
 import { useGraphStore } from '@/utils/graph/store';
 
@@ -17,9 +19,16 @@ const TryPrompts: FC<TryPromptsProps> = ({ className }) => {
   return (
     <section className={clsxm('rounded-x w-full sm:p-2', className)}>
       <>
-        <div className='mt-5 mb-2 w-full text-center'>
+        <div className='mt-5 mb-2 w-full text-center capitalize'>
           <Label htmlFor='api-key' className=''>
-            Enter your openai Api key
+            Enter your OpenAi
+            <ButtonLink
+              href='https://beta.openai.com/account/api-keys'
+              className=' bg-transparent px-2 font-normal text-primary-800 underline'
+              variant='ghost'
+            >
+              api key
+            </ButtonLink>
           </Label>
         </div>
         <ApiInputGroup />
