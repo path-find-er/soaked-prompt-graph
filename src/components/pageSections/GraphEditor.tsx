@@ -1,5 +1,4 @@
-import { AiFillSave } from 'react-icons/ai';
-import { GiTransform } from 'react-icons/gi';
+import { Disclosure } from '@headlessui/react';
 import ReactFlow, { Background, Controls } from 'reactflow';
 
 import ButtonCustom from '@/components/buttons/ButtonCustom';
@@ -19,36 +18,55 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
 
   return (
     <section
-      className={clsxm('rounded-x relative h-full w-full p-5', className)}
+      className={clsxm('rounded-x mt-2 h-full w-full sm:p-2', className)}
     >
       <>
-        <h2 className='m-auto py-3 '>Design template:</h2>
-
-        <div className='flex-1'>
-          <ReactFlow
-            className=' h-full min-h-[80vh] w-full rounded-xl bg-white'
-            nodes={reactFlow.nodes()}
-            edges={reactFlow.edges()}
-            // onNodesChange={(nodeChanges) => {
-            //   reactFlow.onNodeChanges(nodeChanges);
-            // }}
-            // onEdgesChange={(edgeChanges) => {
-            //   reactFlow.onEdgeChanges(edgeChanges);
-            // }}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            proOptions={{ hideAttribution: true }}
-            fitView
-            draggable={false}
-            // on touch devices panning is handles by touch-action: pan-x pan-y
-            minZoom={0.1}
-            maxZoom={10}
-            zoomOnPinch={true}
-          >
-            <Controls />
-            <Background gap={20} />
-          </ReactFlow>
-        </div>
+        <Disclosure defaultOpen>
+          {({ open }) => (
+            <>
+              <Disclosure.Panel className='text-gray-500'>
+                <div className='flex'>
+                  <ReactFlow
+                    className=' h-full min-h-[80vh] w-full rounded-xl bg-white'
+                    nodes={reactFlow.nodes()}
+                    edges={reactFlow.edges()}
+                    // onNodesChange={(nodeChanges) => {
+                    //   reactFlow.onNodeChanges(nodeChanges);
+                    // }}
+                    // onEdgesChange={(edgeChanges) => {
+                    //   reactFlow.onEdgeChanges(edgeChanges);
+                    // }}
+                    nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
+                    proOptions={{ hideAttribution: true }}
+                    fitView
+                    draggable={false}
+                    // on touch devices panning is handles by touch-action: pan-x pan-y
+                    minZoom={0.1}
+                    maxZoom={10}
+                    zoomOnPinch={true}
+                  >
+                    <Controls />
+                    <Background gap={20} />
+                  </ReactFlow>
+                </div>
+              </Disclosure.Panel>
+              <Disclosure.Button className='my-2 flex w-full items-center justify-center rounded-lg '>
+                <ButtonCustom
+                  variant='light'
+                  className={clsxm(
+                    'flex w-full justify-center rounded-b-3xl text-center text-xs hover:scale-100',
+                    {
+                      'fixed bottom-2 rounded-b-lg': !open,
+                    }
+                  )}
+                >
+                  {open ? 'Hide' : 'Show'} template area
+                </ButtonCustom>
+              </Disclosure.Button>
+            </>
+          )}
+        </Disclosure>
         <GraphSaveBar />
 
         <hr className='border-white' />
@@ -106,7 +124,7 @@ const GraphSaveBar: React.FC<GraphSaveBarProps> = ({ className }) => {
     >
       <Combobox value={selected} onChange={setSelected}>
         <div className='relative mt-3 h-full sm:mt-0'>
-          <div className='relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
+          <div className='relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm'>
             <Combobox.Input
               className='w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0'
               displayValue={(option: string) => option}
@@ -174,23 +192,21 @@ const GraphSaveBar: React.FC<GraphSaveBarProps> = ({ className }) => {
       </Combobox>
       <div id='graph-buttons' className='flex flex-row items-center'>
         <ButtonCustom
-          variant='outline'
-          className=' group  rounded-r-none'
+          variant='light'
+          className=' group rounded-r-none  border-r border-gray-200'
           onClick={handleGraphSave}
           // ad a toothip explaining what this button does
           title='Save the graph to local storage'
         >
           Save
-          <AiFillSave className=' fill-slate-700 group-hover:fill-white' />
         </ButtonCustom>
         <ButtonCustom
           onClick={handleGraphLoad}
           className='group rounded-l-none border-l-0'
-          variant='outline'
+          variant='light'
           title='Load a graph saved in local storage'
         >
           Load
-          <GiTransform className=' fill-slate-700 group-hover:fill-white' />
         </ButtonCustom>
       </div>
       <ButtonCustom

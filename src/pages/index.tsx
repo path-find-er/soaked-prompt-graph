@@ -23,3 +23,15 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+// SAP/ui5-webcomponents graphql example
+// query {
+//   repository(name: "SAP/ui5-webcomponents", owner: "")
+//   {
+//     issues(last: 100, states: OPEN) {
+//       nodes {
+//         title
+//         url
+// }
+// }
+// }
