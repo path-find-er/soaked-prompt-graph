@@ -7,4 +7,4 @@ module.exports = {
   /** Without additional '/' on the end, e.g. https://theodorusclarence.com */
   siteUrl: 'https://www.soaked.app',
   generateRobotsTxt: true,
-};
+}

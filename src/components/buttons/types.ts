@@ -12,4 +12,4 @@ export type ButtonVariant =
   | 'ghost'
   | 'ghostLight'
   | 'light'
-  | 'dark';
+  | 'dark'

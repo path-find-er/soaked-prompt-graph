@@ -1,20 +1,20 @@
-import { Label } from 'flowbite-react';
-import type { FC } from 'react';
+import { Label } from 'flowbite-react'
+import type { FC } from 'react'
 
-import ButtonLink from '@/components/buttons/links/ButtonLink';
+import ButtonLink from '@/components/buttons/links/ButtonLink'
 
-import clsxm from '@/utils/clsxm';
-import { useGraphStore } from '@/utils/graph/store';
+import clsxm from '@/utils/clsxm'
+import { useGraphStore } from '@/utils/graph/store'
 
-import GenerateTile from '../display/GenerateTile';
-import ApiInputGroup from '../inputs/ApiKey';
+import GenerateTile from '../display/GenerateTile'
+import ApiInputGroup from '../inputs/ApiKey'
 
 type TryPromptsProps = {
-  className?: string;
-} & React.ComponentPropsWithoutRef<'section'>;
+  className?: string
+} & React.ComponentPropsWithoutRef<'section'>
 
 const TryPrompts: FC<TryPromptsProps> = ({ className }) => {
-  const { prompts } = useGraphStore();
+  const { prompts } = useGraphStore()
 
   return (
     <section className={clsxm('rounded-x w-full sm:p-2', className)}>
@@ -34,16 +34,16 @@ const TryPrompts: FC<TryPromptsProps> = ({ className }) => {
         <ApiInputGroup />
 
         <div className=' flex h-full w-full flex-col space-y-5 overflow-y-auto rounded-xl border-2 border-white p-2 sm:flex-row sm:space-y-0 sm:space-x-3 sm:p-4'>
-          {prompts().map((prompt, i) => {
-            return <GenerateTile key={i} prompt={prompt} />;
+          {prompts.paths().map((prompt, i) => {
+            return <GenerateTile key={i} prompt={prompt} />
           })}
         </div>
       </>
     </section>
-  );
-};
+  )
+}
 
-export default TryPrompts;
+export default TryPrompts
 
 /*
 

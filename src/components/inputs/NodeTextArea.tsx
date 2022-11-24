@@ -1,20 +1,17 @@
-import { Label, Textarea } from 'flowbite-react';
-import { useRef } from 'react';
+import { Label, Textarea } from 'flowbite-react'
+import { useRef } from 'react'
 
 // import uuid version 4
-import clsxm from '@/utils/clsxm';
+import clsxm from '@/utils/clsxm'
 
 type NodeTextAreaProps = {
-  nodeId: string;
-  promptSegment?: string;
-  index: number;
-  onRemove: (index: number) => void;
-  onChange: (
-    evt: React.ChangeEvent<HTMLTextAreaElement>,
-    index: number
-  ) => void;
-  canDelete?: boolean;
-};
+  nodeId: string
+  promptSegment?: string
+  index: number
+  onRemove: (index: number) => void
+  onChange: (evt: React.ChangeEvent<HTMLTextAreaElement>, index: number) => void
+  canDelete?: boolean
+}
 
 const NodeTextArea: React.FC<NodeTextAreaProps> = ({
   nodeId,
@@ -24,8 +21,8 @@ const NodeTextArea: React.FC<NodeTextAreaProps> = ({
   onChange,
   canDelete = false,
 }) => {
-  const key = `node-${nodeId}-promptSegment-${index}`;
-  const ref = useRef<HTMLTextAreaElement>(null);
+  const key = `node-${nodeId}-promptSegment-${index}`
+  const ref = useRef<HTMLTextAreaElement>(null)
 
   return (
     <div className='group/promptSegment relative min-w-[300px] '>
@@ -62,7 +59,7 @@ const NodeTextArea: React.FC<NodeTextAreaProps> = ({
         <span className='sr-only'>Delete promptSegment</span>
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default NodeTextArea;
+export default NodeTextArea

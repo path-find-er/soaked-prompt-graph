@@ -1,61 +1,35 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react'
 // import AiFillMinusCircle
-import type { NodeTypes } from 'reactflow';
-import { Position } from 'reactflow';
+import { Position } from 'reactflow'
 
-import 'reactflow/dist/base.css';
+import 'reactflow/dist/base.css'
 
 // import uuidv4
-import clsxm from '@/utils/clsxm';
-import type { direction } from '@/utils/graph/store';
-import { useGraphStore } from '@/utils/graph/store';
+import clsxm from '@/utils/clsxm'
+import { useGraphStore } from '@/utils/graph/store'
 
-import CustomHandle from './Handles';
-import NodeTextArea from '../inputs/NodeTextArea';
+import type { nodeProps } from './types'
+import CustomHandle from '../Handles'
+import NodeTextArea from '../../inputs/NodeTextArea'
 
-type nodePropsPromptSegment = {
-  data: Record<string, string[]>;
-  id: string;
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+const SegmentNode: React.FC<nodeProps> = ({ data, id, className }) => {
+  const { graph, update, add, remove } = useGraphStore()
 
-const SegmentNode: React.FC<nodePropsPromptSegment> = ({
-  data,
-  id,
-  className,
-}) => {
-  const { graph, update, add, remove } = useGraphStore();
+  const [hideDelete, setHideDelete] = useState(graph.order > 1)
 
-  const [hideDelete, setHideDelete] = useState(graph.order > 1);
-
-  const promptSegments = data.promptSegments;
+  const promptSegments = data.promptSegments
 
   useEffect(() => {
-    setHideDelete(graph.order > 1);
-  }, [graph.order]);
+    setHideDelete(graph.order > 1)
+  }, [graph.order])
 
   const onChange = useCallback(
     (evt: { target: { value: string } }, index: number) => {
-      const { value } = evt.target;
-      update.promptSegment(id, value, index);
+      const { value } = evt.target
+      update.promptSegment(id, value, index)
     },
     [id, update]
-  );
-
-  const handleRemoveSegmentTextArea = (index: number) => {
-    remove.promptSegments(id, index);
-  };
-  const handleAddSegmentTextArea = () => {
-    add.promptSegment(id);
-  };
-
-  const handleAddNode = (direction: direction) => {
-    add.node(id, direction);
-  };
-
-  const handleRemoveNode = () => {
-    remove.node(id);
-  };
+  )
 
   return (
     <div className={clsxm('group/node relative', className)} id={id}>
@@ -69,11 +43,11 @@ const SegmentNode: React.FC<nodePropsPromptSegment> = ({
                     nodeId={id}
                     promptSegment={promptSegment}
                     index={index}
-                    onRemove={handleRemoveSegmentTextArea}
+                    onRemove={() => remove.promptSegments(id, index)}
                     canDelete={promptSegments.length > 1}
                     onChange={onChange}
                   />
-                );
+                )
               }
             )
           : null}
@@ -83,12 +57,12 @@ const SegmentNode: React.FC<nodePropsPromptSegment> = ({
         type='source'
         position={Position.Top}
         id={`${id}`}
-        onClick={() => handleAddNode('up')}
+        onClick={() => add.node(id, 'up')}
       />
       <button
         aria-label='Add PromptSegment'
         className='absolute inset-y-[20px] right-0 flex w-5 cursor-pointer items-center justify-center rounded-r-md bg-green-200 text-black'
-        onClick={handleAddSegmentTextArea}
+        onClick={() => add.promptSegment(id)}
       >
         <span aria-label='Add PromptSegment'>+</span>
       </button>
@@ -101,7 +75,7 @@ const SegmentNode: React.FC<nodePropsPromptSegment> = ({
             hidden: !hideDelete,
           }
         )}
-        onClick={handleRemoveNode}
+        onClick={() => remove.node(id)}
       >
         <span aria-label='Remove Node'> - </span>
       </button>
@@ -110,14 +84,10 @@ const SegmentNode: React.FC<nodePropsPromptSegment> = ({
         type='target'
         position={Position.Bottom}
         id={`${id}`}
-        onClick={() => handleAddNode('down')}
+        onClick={() => add.node(id, 'down')}
       />
     </div>
-  );
-};
+  )
+}
 
-export default SegmentNode;
-
-export const nodeTypes = {
-  promptSegment: SegmentNode,
-} as NodeTypes;
+export default SegmentNode

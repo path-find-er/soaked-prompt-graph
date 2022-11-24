@@ -1,21 +1,21 @@
-import ReactFlow, { Background, Controls } from 'reactflow';
+import ReactFlow, { Background, Controls } from 'reactflow'
 
-import ButtonCustom from '@/components/buttons/ButtonCustom';
-import { edgeTypes } from '@/components/reactflow/Edges';
-import { nodeTypes } from '@/components/reactflow/Nodes';
+import ButtonCustom from '@/components/buttons/ButtonCustom'
+import { edgeTypes } from '@/components/reactflow/Edges'
+import { nodeTypes } from '@/components/reactflow/nodes/types'
 
-import clsxm from '@/utils/clsxm';
-import { useGraphStore } from '@/utils/graph/store';
-import { checkForGraph, loadGraph, saveGraph } from '@/utils/helpers';
+import clsxm from '@/utils/clsxm'
+import { useGraphStore } from '@/utils/graph/store'
+import { checkForGraph, loadGraph, saveGraph } from '@/utils/helpers'
 
 type GraphEditorProps = {
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+  className?: string
+} & React.ComponentPropsWithoutRef<'div'>
 
 const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
-  const { reactFlow } = useGraphStore();
+  const { reactFlow } = useGraphStore()
 
-  const [closeTemplateArea, setCloseTemplateArea] = useState(false);
+  const [closeTemplateArea, setCloseTemplateArea] = useState(false)
 
   return (
     <div className={clsxm('rounded-x mt-2 h-full w-full sm:p-2', className)}>
@@ -35,9 +35,8 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
           proOptions={{ hideAttribution: true }}
           fitView
           draggable={false}
-          // on touch devices panning is handles by touch-action: pan-x pan-y
-          minZoom={0.1}
-          maxZoom={10}
+          minZoom={0.3}
+          maxZoom={1}
           zoomOnPinch={true}
           zoomOnDoubleClick={false}
         >
@@ -46,10 +45,10 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
         </ReactFlow>
       </div>
       <ButtonCustom
-        variant='light'
+        variant='dark'
         onClick={() => setCloseTemplateArea(!closeTemplateArea)}
         className={clsxm(
-          'my-2 flex w-full justify-center rounded-b-3xl text-center text-xs hover:scale-100',
+          'my-2 flex w-full justify-center rounded-b-3xl text-center hover:scale-100',
           {
             'fixed inset-x-0 bottom-2 z-40 mx-auto max-w-sm rounded-b-md text-lg':
               closeTemplateArea,
@@ -64,48 +63,48 @@ const GraphEditor: React.FC<GraphEditorProps> = ({ className }) => {
 
       <hr className='border-white' />
     </div>
-  );
-};
+  )
+}
 
-export default GraphEditor;
+export default GraphEditor
 
-import { Combobox, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import { HiCheckCircle, HiChevronDown } from 'react-icons/hi';
+import { Combobox, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react'
+import { HiCheckCircle, HiChevronDown } from 'react-icons/hi'
 
 type GraphSaveBarProps = {
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+  className?: string
+} & React.ComponentPropsWithoutRef<'div'>
 
-const options = ['Graph 1', 'Graph 2', 'Graph 3', 'Graph 4', 'Graph 5'];
+const options = ['Graph 1', 'Graph 2', 'Graph 3', 'Graph 4', 'Graph 5']
 
 const GraphSaveBar: React.FC<GraphSaveBarProps> = ({ className }) => {
-  const { graph, update } = useGraphStore();
-  const [selected, setSelected] = useState(options[0]);
-  const [query, setQuery] = useState('');
+  const { graph, update } = useGraphStore()
+  const [selected, setSelected] = useState(options[0])
+  const [query, setQuery] = useState('')
 
   const handleGraphSave = () => {
     selected
       ? saveGraph(graph, selected)
-      : alert('Please select a graph option');
-  };
+      : alert('Please select a graph option')
+  }
 
   const handleGraphLoad = () => {
     selected && checkForGraph(selected)
       ? update.graph.set(loadGraph(selected))
-      : alert('Please select a graph option');
-  };
+      : alert('Please select a graph option')
+  }
 
   const handleGraphReset = () => {
-    update.graph.reset();
-  };
+    update.graph.reset()
+  }
 
   const filteredOptions =
     query === ''
       ? options
       : options.filter((option) =>
           option.toLowerCase().includes(query.toLowerCase())
-        );
+        )
 
   return (
     <div
@@ -209,5 +208,5 @@ const GraphSaveBar: React.FC<GraphSaveBarProps> = ({ className }) => {
         Reset
       </ButtonCustom>
     </div>
-  );
-};
+  )
+}

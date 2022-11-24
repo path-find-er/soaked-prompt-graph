@@ -1,10 +1,10 @@
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react'
 
-import clsxm from '@/utils/clsxm';
+import clsxm from '@/utils/clsxm'
 
 type PopoverProps = {
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+  className?: string
+} & React.ComponentPropsWithoutRef<'div'>
 
 const Popover: React.FC<PropsWithChildren<PopoverProps>> = ({
   className,
@@ -29,7 +29,7 @@ const Popover: React.FC<PropsWithChildren<PopoverProps>> = ({
         <div data-popper-arrow></div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Popover;
+export default Popover

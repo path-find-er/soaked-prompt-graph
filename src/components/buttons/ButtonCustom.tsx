@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { ImSpinner2 } from 'react-icons/im';
+import * as React from 'react'
+import { ImSpinner2 } from 'react-icons/im'
 
-import type { ButtonVariant } from '@/components/buttons/types';
+import type { ButtonVariant } from '@/components/buttons/types'
 
-import clsxm from '@/utils/clsxm';
+import clsxm from '@/utils/clsxm'
 
-import { buttonVariantClasses } from './variants';
+import { buttonVariantClasses } from './variants'
 
 type ButtonProps = {
-  isLoading?: boolean;
-  variant?: ButtonVariant;
-} & React.ComponentPropsWithRef<'button'>;
+  isLoading?: boolean
+  variant?: ButtonVariant
+} & React.ComponentPropsWithRef<'button'>
 
 const ButtonCustom = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -24,7 +24,7 @@ const ButtonCustom = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const disabled = isLoading || buttonDisabled;
+    const disabled = isLoading || buttonDisabled
 
     return (
       <button
@@ -71,8 +71,8 @@ const ButtonCustom = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {children}
       </button>
-    );
+    )
   }
-);
+)
 
-export default ButtonCustom;
+export default ButtonCustom

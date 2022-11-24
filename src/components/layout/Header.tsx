@@ -1,10 +1,10 @@
-import ButtonLink from '@/components/buttons/links/ButtonLink';
+import ButtonLink from '@/components/buttons/links/ButtonLink'
 
-import clsxm from '@/utils/clsxm';
+import clsxm from '@/utils/clsxm'
 
 type HeaderProps = {
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+  className?: string
+} & React.ComponentPropsWithoutRef<'div'>
 
 const Header: React.FC<HeaderProps> = ({ className }) => {
   return (
@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
         </div>
       </nav>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

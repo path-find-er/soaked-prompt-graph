@@ -1,25 +1,25 @@
-import React from 'react';
-import type { EdgeTypes, Position } from 'reactflow';
-import { getBezierPath } from 'reactflow';
+import React from 'react'
+import type { EdgeTypes, Position } from 'reactflow'
+import { getBezierPath } from 'reactflow'
 
-const foreignObjectSize = 40;
+const foreignObjectSize = 40
 
 const onEdgeClick = (evt: React.MouseEvent, id: string) => {
-  evt.stopPropagation();
-  alert(`remove ${id}`);
-};
+  evt.stopPropagation()
+  alert(`remove ${id}`)
+}
 
 type CustomEdgeProps = {
-  id: string;
-  sourceX: number;
-  sourceY: number;
-  targetX: number;
-  targetY: number;
-  sourcePosition: Position;
-  targetPosition: Position;
-  markerEnd: string;
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+  id: string
+  sourceX: number
+  sourceY: number
+  targetX: number
+  targetY: number
+  sourcePosition: Position
+  targetPosition: Position
+  markerEnd: string
+  className?: string
+} & React.ComponentPropsWithoutRef<'div'>
 
 const CustomEdge: React.FC<CustomEdgeProps> = ({
   id,
@@ -38,7 +38,7 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
     targetX,
     targetY,
     targetPosition,
-  });
+  })
 
   return (
     <>
@@ -67,11 +67,11 @@ const CustomEdge: React.FC<CustomEdgeProps> = ({
         </body>
       </foreignObject>
     </>
-  );
-};
+  )
+}
 
-export default CustomEdge;
+export default CustomEdge
 
 export const edgeTypes = {
   plus: CustomEdge,
-} as EdgeTypes;
+} as EdgeTypes

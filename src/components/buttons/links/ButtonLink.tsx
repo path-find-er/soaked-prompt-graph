@@ -1,15 +1,15 @@
-import { forwardRef } from 'react';
+import { forwardRef } from 'react'
 
-import type { UnstyledLinkProps } from '@/components/buttons/links/UnstyledLink';
-import UnstyledLink from '@/components/buttons/links/UnstyledLink';
-import type { ButtonVariant } from '@/components/buttons/types';
-import { buttonVariantClasses } from '@/components/buttons/variants';
+import type { UnstyledLinkProps } from '@/components/buttons/links/UnstyledLink'
+import UnstyledLink from '@/components/buttons/links/UnstyledLink'
+import type { ButtonVariant } from '@/components/buttons/types'
+import { buttonVariantClasses } from '@/components/buttons/variants'
 
-import clsxm from '@/utils/clsxm';
+import clsxm from '@/utils/clsxm'
 
 type ButtonLinkProps = {
-  variant?: ButtonVariant;
-} & UnstyledLinkProps;
+  variant?: ButtonVariant
+} & UnstyledLinkProps
 
 const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
   ({ children, className, variant = 'primary', ...rest }, ref) => {
@@ -37,8 +37,8 @@ const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       >
         {children}
       </UnstyledLink>
-    );
+    )
   }
-);
+)
 
-export default ButtonLink;
+export default ButtonLink

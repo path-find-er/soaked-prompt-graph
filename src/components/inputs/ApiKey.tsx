@@ -1,45 +1,45 @@
-import { TextInput } from 'flowbite-react';
-import { atom, useAtom } from 'jotai';
-import { useState } from 'react';
-import * as React from 'react';
-import { AiFillEyeInvisible } from 'react-icons/ai';
-import { HiCheckCircle } from 'react-icons/hi';
-import SimpleCrypto from 'simple-crypto-js';
+import { TextInput } from 'flowbite-react'
+import { atom, useAtom } from 'jotai'
+import { useState } from 'react'
+import * as React from 'react'
+import { AiFillEyeInvisible } from 'react-icons/ai'
+import { HiCheckCircle } from 'react-icons/hi'
+import SimpleCrypto from 'simple-crypto-js'
 
-import ButtonCustom from '@/components/buttons/ButtonCustom';
+import ButtonCustom from '@/components/buttons/ButtonCustom'
 
-import clsxm from '@/utils/clsxm';
+import clsxm from '@/utils/clsxm'
 
-const mk = () => 'NgqUCBFoLq7qn1RhOKNy';
+const mk = () => 'NgqUCBFoLq7qn1RhOKNy'
 
-const sc = mk();
+const sc = mk()
 
-const useSC = new SimpleCrypto(sc);
+const useSC = new SimpleCrypto(sc)
 
-export const ApiKeyAtom = atom('');
+export const ApiKeyAtom = atom('')
 
 type ApiKeyProps = {
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+  className?: string
+} & React.ComponentPropsWithoutRef<'div'>
 
 const ApiKey: React.FC<ApiKeyProps> = ({ className }) => {
-  const [apiKey, setApiKey] = useAtom(ApiKeyAtom);
-  const [apiDisplay, setApiDisplay] = useState(apiKey);
+  const [apiKey, setApiKey] = useAtom(ApiKeyAtom)
+  const [apiDisplay, setApiDisplay] = useState(apiKey)
 
   const handleApiKeySave = (value: string) => {
-    setApiKey(value);
-    const encryptedApiKey = useSC.encrypt(value);
-    localStorage.setItem('prompt-engine-save-data', encryptedApiKey);
-  };
+    setApiKey(value)
+    const encryptedApiKey = useSC.encrypt(value)
+    localStorage.setItem('prompt-engine-save-data', encryptedApiKey)
+  }
 
   const handleApiKeyLoad = () => {
-    const localStorageItem = localStorage.getItem('prompt-engine-save-data');
+    const localStorageItem = localStorage.getItem('prompt-engine-save-data')
     if (localStorageItem) {
-      const decryptedApiKey = useSC.decrypt(localStorageItem) as string;
-      setApiKey(decryptedApiKey);
-      setApiDisplay(decryptedApiKey);
+      const decryptedApiKey = useSC.decrypt(localStorageItem) as string
+      setApiKey(decryptedApiKey)
+      setApiDisplay(decryptedApiKey)
     }
-  };
+  }
   return (
     <div
       className={clsxm('mb-5 flex grow items-center justify-center', className)}
@@ -82,7 +82,7 @@ const ApiKey: React.FC<ApiKeyProps> = ({ className }) => {
         load
       </ButtonCustom>
     </div>
-  );
-};
+  )
+}
 
-export default ApiKey;
+export default ApiKey

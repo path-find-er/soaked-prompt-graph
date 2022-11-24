@@ -1,11 +1,11 @@
-import { type NextPage } from 'next';
-import Head from 'next/head';
-import { Suspense } from 'react';
+import { type NextPage } from 'next'
+import Head from 'next/head'
+import { Suspense } from 'react'
 
-import GraphEditor from '@/components/pageSections/GraphEditor';
-import TryPrompts from '@/components/pageSections/TryPrompts';
+import GraphEditor from '@/components/pageSections/GraphEditor'
+import TryPrompts from '@/components/pageSections/TryPrompts'
 
-import Layout from '../components/layout/Layout';
+import Layout from '../components/layout/Layout'
 
 const Home: NextPage = () => {
   return (
@@ -22,10 +22,10 @@ const Home: NextPage = () => {
         </Suspense>
       </Layout>
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
 
 // SAP/ui5-webcomponents graphql example
 // query {

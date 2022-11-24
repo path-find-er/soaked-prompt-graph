@@ -32,4 +32,4 @@ export const buttonVariantClasses = {
     'hover:bg-white hover:text-primary-900',
     'active:bg-primary-700 disabled:bg-primary-700',
   ],
-};
+}

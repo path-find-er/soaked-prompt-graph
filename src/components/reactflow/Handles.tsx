@@ -1,14 +1,14 @@
-import type { Position } from 'reactflow';
-import { Handle } from 'reactflow';
+import type { Position } from 'reactflow'
+import { Handle } from 'reactflow'
 
-import { clsxm } from '@/utils/clsxm';
+import { clsxm } from '@/utils/clsxm'
 
 type handleProps = {
-  type: 'target' | 'source';
-  position: Position;
-  id: string;
-  className?: string;
-} & React.ComponentPropsWithoutRef<'div'>;
+  type: 'target' | 'source'
+  position: Position
+  id: string
+  className?: string
+} & React.ComponentPropsWithoutRef<'div'>
 
 export const CustomHandle: React.FC<handleProps> = ({
   type,
@@ -40,7 +40,7 @@ export const CustomHandle: React.FC<handleProps> = ({
     >
       +
     </Handle>
-  );
-};
+  )
+}
 
-export default CustomHandle;
+export default CustomHandle
