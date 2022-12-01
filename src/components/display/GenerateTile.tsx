@@ -177,7 +177,7 @@ export const generateOpenAiCompletion = async (
   promptText: string,
   max_tokens = 256,
   temperature = 0.7,
-  model = 'text-davinci-002',
+  model = 'text-davinci-003',
   top_p = 1,
   frequency_penalty = 0,
   presence_penalty = 0
